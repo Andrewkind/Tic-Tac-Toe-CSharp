@@ -7,27 +7,30 @@ using System;
 
 namespace Tic_Tac_toe
 {
-    class Program
+    static public class GameBoard {
+        public static string squareSymbol; // The value within a square (can be "X", "O" or a number 1-9)
+        public static int[] squarePosition; // The position of the square played. The array is: [row, column]
+        public static bool playAgain = true; // Remains true if the player wants to play another game 
+        public static int movesPlayed = 0; // Keeps track of the number of moves played
+        public static bool gameActive = true; // The game is active unless we have a winner/tie
+
+        public static string currentPlayer; // Hold current player. Will be either "X" or "O" at all times.
+        public static bool gameTie = false; // Set to true if the game ends in a tie
+        public static string[,] board; // Our game board. Array size of 3x3.  
+    }
+    public class Program
     {
         // Global Variable Declarations
-        static string squareSymbol; // The value within a square (can be "X", "O" or a number 1-9)
-        static int[] squarePosition; // The position of the square played. The array is: [row, column]
-        static bool playAgain = true; // Remains true if the player wants to play another game 
-        static int movesPlayed = 0; // Keeps track of the number of moves played
-        static bool gameActive = true; // The game is active unless we have a winner/tie
-
-        static string currentPlayer; // Hold current player. Will be either "X" or "O" at all times.
-        static bool gameTie = false; // Set to true if the game ends in a tie
-        static string[,] gameBoard; // Our game board. Array size of 3x3.  
+        
 
         static void Main(string[] args)
         {
             // Determines if we play a game
-            while (playAgain)
+            while (GameBoard.playAgain)
             {
 
-                // playAgain will be set to true at the end of our game to see if we play again
-                playAgain = false;
+                //GameBoard.board.playAgain will be set to true at the end of our game to see if we play again
+                GameBoard.playAgain = false;
 
                 // Run main game logic
                 StartGame();
@@ -46,7 +49,7 @@ namespace Tic_Tac_toe
                     {
                         //User indicated they want to play again
                         validInput = true;
-                        playAgain = true;
+                       GameBoard.playAgain = true;
 
 
                     }
@@ -126,9 +129,10 @@ namespace Tic_Tac_toe
                 {
                     // valid number
                     //check if the square position associated with the number is filled already
-                    int[] squarePosition = GetSquarePosition(userInput);
-                    squareSymbol = gameBoard[squarePosition[0], squarePosition[1]];
-                    if (squareSymbol == "X" || squareSymbol == "O")
+                    int[] squarePosition = GetGameBoard(userInput);
+
+                    GameBoard.squareSymbol = GameBoard.board[GameBoard.squarePosition[0], GameBoard.squarePosition[1]];
+                    if (GameBoard.squareSymbol == "X" || GameBoard.squareSymbol == "O")
                     {
                         // The Symbol in the square position is already filled with a "X" or "O"
                         // Prompt user to try a different square selection
@@ -136,7 +140,7 @@ namespace Tic_Tac_toe
                         Console.BackgroundColor = ConsoleColor.DarkRed;
 
                         Console.WriteLine();
-                        Console.Write("Square in row {0} and column {1} is already taken. press any key.", squarePosition[0], squarePosition[1]);
+                        Console.Write("Square in row {0} and column {1} is already taken. press any key.", GameBoard.squarePosition[0], GameBoard.squarePosition[1]);
                         Console.WriteLine();
 
                         Console.ResetColor();
@@ -173,7 +177,7 @@ namespace Tic_Tac_toe
             //
             GetUserInput();
 
-            movesPlayed++; // Turn is over so increment moves played.
+            GameBoard.movesPlayed++; // Turn is over so increment moves played.
         }
 
         /// <summary>
@@ -183,7 +187,7 @@ namespace Tic_Tac_toe
             InitializeGame();
             showSplashScreen();
 
-            while (gameActive == true)
+            while (GameBoard.gameActive == true)
             {
                 DoTurn();
 
@@ -192,9 +196,9 @@ namespace Tic_Tac_toe
                 {
 
                     // We have found a winner
-                    gameActive = false;
+                    GameBoard.gameActive = false;
                     PrintGameBoard();
-                    if (currentPlayer == "X")
+                    if (GameBoard.currentPlayer == "X")
                     {
                         Console.BackgroundColor = ConsoleColor.Red;
 
@@ -207,7 +211,7 @@ namespace Tic_Tac_toe
                     Console.ForegroundColor = ConsoleColor.Black;
 
                     Console.WriteLine();
-                    Console.Write("PLAYER {0} WINS", currentPlayer);
+                    Console.Write("PLAYER {0} WINS", GameBoard.currentPlayer);
                     Console.WriteLine();
 
                     Console.ResetColor();
@@ -215,7 +219,7 @@ namespace Tic_Tac_toe
 
                 // We have no winner yet.
                 // Check if the board is full for a tie
-                else if (movesPlayed > 8)
+                else if (GameBoard.movesPlayed > 8)
                 {
                     // We have a tie
                     Console.BackgroundColor = ConsoleColor.DarkBlue;
@@ -227,19 +231,19 @@ namespace Tic_Tac_toe
 
                     Console.ResetColor();
 
-                    gameTie = true; // set game as a tie
-                    gameActive = false; //end the game
+                    GameBoard.gameTie = true; // set game as a tie
+                    GameBoard.gameActive = false; //end the game
                 }
 
 
                 // Game did not end so switch to next player.
-                if (currentPlayer == "X")
+                if (GameBoard.currentPlayer == "X")
                 {
-                    currentPlayer = "O";
+                    GameBoard.currentPlayer = "O";
                 }
                 else
                 {
-                    currentPlayer = "X";
+                    GameBoard.currentPlayer = "X";
                 }
 
             }
@@ -269,43 +273,43 @@ namespace Tic_Tac_toe
         {
 
             //row one across
-            if (CheckPositionsForWinner(gameBoard[0, 0], gameBoard[0, 1], gameBoard[0, 2]))
+            if (CheckPositionsForWinner(GameBoard.board[0, 0], GameBoard.board[0, 1], GameBoard.board[0, 2]))
             {
                 return true;
             }
 
             //row two across
-            if (CheckPositionsForWinner(gameBoard[1, 0], gameBoard[1, 1], gameBoard[1, 2]))
+            if (CheckPositionsForWinner(GameBoard.board[1, 0], GameBoard.board[1, 1], GameBoard.board[1, 2]))
             {
                 return true;
             }
             //row three across
-            if (CheckPositionsForWinner(gameBoard[2, 0], gameBoard[2, 1], gameBoard[2, 2]))
+            if (CheckPositionsForWinner(GameBoard.board[2, 0], GameBoard.board[2, 1], GameBoard.board[2, 2]))
             {
                 return true;
             }
             //column 1 down
-            if (CheckPositionsForWinner(gameBoard[0, 0], gameBoard[1, 0], gameBoard[2, 0]))
+            if (CheckPositionsForWinner(GameBoard.board[0, 0], GameBoard.board[1, 0], GameBoard.board[2, 0]))
             {
                 return true;
             }
             // column 2 down
-            if (CheckPositionsForWinner(gameBoard[0, 1], gameBoard[1, 1], gameBoard[2, 1]))
+            if (CheckPositionsForWinner(GameBoard.board[0, 1], GameBoard.board[1, 1], GameBoard.board[2, 1]))
             {
                 return true;
             }
             // column 3 down
-            if (CheckPositionsForWinner(gameBoard[0, 2], gameBoard[1, 2], gameBoard[2, 2]))
+            if (CheckPositionsForWinner(GameBoard.board[0, 2], GameBoard.board[1, 2], GameBoard.board[2, 2]))
             {
                 return true;
             }
             // top left to bottom right
-            if (CheckPositionsForWinner(gameBoard[0, 0], gameBoard[1, 1], gameBoard[2, 2]))
+            if (CheckPositionsForWinner(GameBoard.board[0, 0], GameBoard.board[1, 1], GameBoard.board[2, 2]))
             {
                 return true;
             }
             // top right to bottom left
-            if (CheckPositionsForWinner(gameBoard[2, 0], gameBoard[1, 1], gameBoard[0, 2]))
+            if (CheckPositionsForWinner(GameBoard.board[2, 0], GameBoard.board[1, 1], GameBoard.board[0, 2]))
             {
                 return true;
             }
@@ -356,24 +360,24 @@ namespace Tic_Tac_toe
 
             Console.Write("| ");
 
-            Console.ForegroundColor = GetSymbolColor(gameBoard[0, 0]);
-            Console.Write(gameBoard[0, 0]);
+            Console.ForegroundColor = GetSymbolColor(GameBoard.board[0, 0]);
+            Console.Write(GameBoard.board[0, 0]);
             Console.ResetColor();
 
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write(" | ");
             Console.ResetColor();
 
-            Console.ForegroundColor = GetSymbolColor(gameBoard[0, 1]);
-            Console.Write(gameBoard[0, 1]);
+            Console.ForegroundColor = GetSymbolColor(GameBoard.board[0, 1]);
+            Console.Write(GameBoard.board[0, 1]);
             Console.ResetColor();
 
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write(" | ");
             Console.ResetColor();
 
-            Console.ForegroundColor = GetSymbolColor(gameBoard[0, 2]);
-            Console.Write(gameBoard[0, 2]);
+            Console.ForegroundColor = GetSymbolColor(GameBoard.board[0, 2]);
+            Console.Write(GameBoard.board[0, 2]);
             Console.ResetColor();
 
             Console.ForegroundColor = ConsoleColor.White;
@@ -387,24 +391,24 @@ namespace Tic_Tac_toe
 
             Console.Write("| ");
 
-            Console.ForegroundColor = GetSymbolColor(gameBoard[1, 0]);
-            Console.Write(gameBoard[1, 0]);
+            Console.ForegroundColor = GetSymbolColor(GameBoard.board[1, 0]);
+            Console.Write(GameBoard.board[1, 0]);
             Console.ResetColor();
 
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write(" | ");
             Console.ResetColor();
 
-            Console.ForegroundColor = GetSymbolColor(gameBoard[1, 1]);
-            Console.Write(gameBoard[1, 1]);
+            Console.ForegroundColor = GetSymbolColor(GameBoard.board[1, 1]);
+            Console.Write(GameBoard.board[1, 1]);
             Console.ResetColor();
 
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write(" | ");
             Console.ResetColor();
 
-            Console.ForegroundColor = GetSymbolColor(gameBoard[1, 2]);
-            Console.Write(gameBoard[1, 2]);
+            Console.ForegroundColor = GetSymbolColor(GameBoard.board[1, 2]);
+            Console.Write(GameBoard.board[1, 2]);
             Console.ResetColor();
 
             Console.ForegroundColor = ConsoleColor.White;
@@ -418,24 +422,24 @@ namespace Tic_Tac_toe
 
             Console.Write("| ");
 
-            Console.ForegroundColor = GetSymbolColor(gameBoard[2, 0]);
-            Console.Write(gameBoard[2, 0]);
+            Console.ForegroundColor = GetSymbolColor(GameBoard.board[2, 0]);
+            Console.Write(GameBoard.board[2, 0]);
             Console.ResetColor();
 
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write(" | ");
             Console.ResetColor();
 
-            Console.ForegroundColor = GetSymbolColor(gameBoard[2, 1]);
-            Console.Write(gameBoard[2, 1]);
+            Console.ForegroundColor = GetSymbolColor(GameBoard.board[2, 1]);
+            Console.Write(GameBoard.board[2, 1]);
             Console.ResetColor();
 
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write(" | ");
             Console.ResetColor();
 
-            Console.ForegroundColor = GetSymbolColor(gameBoard[2, 2]);
-            Console.Write(gameBoard[2, 2]);
+            Console.ForegroundColor = GetSymbolColor(GameBoard.board[2, 2]);
+            Console.Write(GameBoard.board[2, 2]);
             Console.ResetColor();
 
             Console.ForegroundColor = ConsoleColor.White;
@@ -450,7 +454,7 @@ namespace Tic_Tac_toe
 
             Console.ForegroundColor = ConsoleColor.Black;
 
-            if (currentPlayer == "X")
+            if (GameBoard.currentPlayer == "X")
             {
                 Console.BackgroundColor = ConsoleColor.Red;
 
@@ -461,7 +465,7 @@ namespace Tic_Tac_toe
 
             }
             Console.WriteLine();
-            Console.Write(" It is Player's {0} turn! ", currentPlayer);
+            Console.Write(" It is Player's {0} turn! ", GameBoard.currentPlayer);
             Console.ResetColor();
             Console.WriteLine();
 
@@ -473,13 +477,13 @@ namespace Tic_Tac_toe
         /// Method to initiliaze the game. It resets all variables to start the game properly.</summary>
         static void InitializeGame()
         {
-            currentPlayer = "X";
-            movesPlayed = 0;
-            gameTie = false;
-            gameActive = true;
+            GameBoard.currentPlayer = "X";
+            GameBoard.movesPlayed = 0;
+            GameBoard.gameTie = false;
+            GameBoard.gameActive = true;
 
             //reset game board
-            gameBoard = new string[3, 3]{
+            GameBoard.board = new string[3, 3]{
                                 {"1", "2", "3"},
                                 {"4", "5", "6"},
                                 {"7", "8", "9"},
@@ -501,53 +505,53 @@ namespace Tic_Tac_toe
                 isValid = validateInput(userInput);
             }
             // Fill in the spot
-            gameBoard[squarePosition[0], squarePosition[1]] = currentPlayer; //Assign the current turn (either X or O to the square position)
+            GameBoard.board[GameBoard.squarePosition[0], GameBoard.squarePosition[1]] = GameBoard.currentPlayer; //Assign the current turn (either X or O to the square position)
 
         }
 
         /// <summary>
         /// Pass in the user's input and return the square position in a 2d int array.</summary>
         /// <param name="userInput"> validated user input</param>
-        static int[] GetSquarePosition(string userInput)
+        static int[] GetGameBoard(string userInput)
         {
 
             switch (userInput)
             {
 
                 case "1":
-                    squarePosition = new int[2] { 0, 0 };
+                    GameBoard.squarePosition = new int[2] { 0, 0 };
 
                     break;
                 case "2":
-                    squarePosition = new int[2] { 0, 1 };
+                    GameBoard.squarePosition = new int[2] { 0, 1 };
                     break;
                 case "3":
-                    squarePosition = new int[2] { 0, 2 };
+                    GameBoard.squarePosition = new int[2] { 0, 2 };
                     break;
                 case "4":
-                    squarePosition = new int[2] { 1, 0 };
+                    GameBoard.squarePosition = new int[2] { 1, 0 };
                     break;
                 case "5":
-                    squarePosition = new int[2] { 1, 1 };
+                    GameBoard.squarePosition = new int[2] { 1, 1 };
                     break;
                 case "6":
-                    squarePosition = new int[2] { 1, 2 };
+                    GameBoard.squarePosition = new int[2] { 1, 2 };
                     break;
                 case "7":
-                    squarePosition = new int[2] { 2, 0 };
+                    GameBoard.squarePosition = new int[2] { 2, 0 };
                     break;
                 case "8":
-                    squarePosition = new int[2] { 2, 1 };
+                    GameBoard.squarePosition = new int[2] { 2, 1 };
                     break;
                 case "9":
-                    squarePosition = new int[2] { 2, 2 };
+                    GameBoard.squarePosition = new int[2] { 2, 2 };
                     break;
                 default:
                     break;
             }
-            string squareSymbol = gameBoard[squarePosition[0], squarePosition[1]];
+            string squareSymbol = GameBoard.board[GameBoard.squarePosition[0], GameBoard.squarePosition[1]];
 
-            return squarePosition;
+            return GameBoard.squarePosition;
         }
     }
 }
