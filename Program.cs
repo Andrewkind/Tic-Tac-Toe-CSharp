@@ -1,5 +1,5 @@
 ﻿/*
-TECHCareers Practice Questions
+TIC TAC TOE
 Author: Andrew Kind
 */
 
@@ -9,40 +9,42 @@ namespace Tic_Tac_toe
 {
     class Program
     {
-
-        // Variable Declarations
-
-        static string squareSymbol; // Holds the current symbol
-        static int[] squarePosition;
-        static bool playAgain = true;
-        static int movesPlayed = 0;
+        // Global Variable Declarations
+        static string squareSymbol; // The value within a square (can be "X", "O" or a number 1-9)
+        static int[] squarePosition; // The position of the square played. The array is: [row, column]
+        static bool playAgain = true; // Remains true if the player wants to play another game 
+        static int movesPlayed = 0; // Keeps track of the number of moves played
         static bool gameActive = true; // The game is active unless we have a winner/tie
 
-        static string currentTurn = "X"; // Starts game with player X
-        static bool gameTie = false; // Used to set game winner
-        static string[,] gameBoard;
+        static string currentPlayer; // Hold current player. Will be either "X" or "O" at all times.
+        static bool gameTie = false; // Set to true if the game ends in a tie
+        static string[,] gameBoard; // Our game board. Array size of 3x3.  
 
         static void Main(string[] args)
         {
-
-
+            // Determines if we play a game
             while (playAgain)
             {
-                playAgain = false; // playAgain will be set to true at the end of our game to see if we play again
+
+                // playAgain will be set to true at the end of our game to see if we play again
+                playAgain = false;
+
+                // Run main game logic
                 StartGame();
 
-                //game is over. see if we replay
-                // check with use if he wants to play again?
+                //Game is over. Check with user if they want to play again.
                 bool validInput = false;
-                Console.WriteLine();
 
                 while (validInput == false)
                 {
+                    //Ask player if they want to play again
+                    Console.WriteLine();
+
                     Console.WriteLine("Would you like to play again? [Y/N]");
                     string userInput = Console.ReadKey().KeyChar.ToString().ToUpper();
                     if (userInput == "Y")
                     {
-                        //play again
+                        //User indicated they want to play again
                         validInput = true;
                         playAgain = true;
 
@@ -50,21 +52,22 @@ namespace Tic_Tac_toe
                     }
                     else if (userInput == "N")
                     {
-                        //exit
+                        //User indicated they do not want to play again
                         validInput = true;
 
-                        // User decided not to play again. say goodbye.
                         Console.WriteLine();
-                        Console.BackgroundColor = ConsoleColor.DarkBlue;
+                        Console.BackgroundColor = ConsoleColor.Green;
+                        Console.ForegroundColor = ConsoleColor.Black;
 
                         Console.Write("Thank you for playing TIC TAC TOE (shareware edition)");
+                        Console.ResetColor();
                         Console.WriteLine();
 
-                        Console.ResetColor();
                     }
                     else
                     {
-                        // invalid entry
+                        // User provided an invalid entry (Did not enter Y or N)
+                        // User will be prompt an error and can try again
                         Console.WriteLine();
                         Console.BackgroundColor = ConsoleColor.DarkRed;
 
@@ -75,24 +78,17 @@ namespace Tic_Tac_toe
                 }
             }
 
-
-
-            // determine if player plays again
         }
 
-
-        // Write the Main Menu Lines
         static void showSplashScreen()
         {
             // How to ignore escape character \ in WriteLine
-            //https://stackoverflow.com/questions/15142141/how-do-i-write-console-writeline-and-ignore-unrecognized-escape
-
+            //Source: https://stackoverflow.com/questions/15142141/how-do-i-write-console-writeline-and-ignore-unrecognized-escape
 
             Console.Clear();
 
             Console.BackgroundColor = ConsoleColor.Magenta;
             Console.WriteLine("▒▒██████████████████████████████████████████████████▒▒");
-            Console.BackgroundColor = ConsoleColor.DarkMagenta;
 
             Console.WriteLine(@"██  _____ ___ ___   _____ _   ___   _____ ___  ___  ██");
             Console.WriteLine(@"██ |_   _|_ _/ __| |_   _/_\ / __| |_   _/ _ \| __| ██");
@@ -100,7 +96,6 @@ namespace Tic_Tac_toe
             Console.WriteLine(@"██   |_| |___\___|   |_/_/ \_\___|   |_| \___/|___| ██");
 
             Console.WriteLine(@"██                                                  ██");
-            Console.BackgroundColor = ConsoleColor.Magenta;
 
             Console.WriteLine("▒▒██████████████████████████████████████████████████▒▒");
             Console.WriteLine();
@@ -110,17 +105,19 @@ namespace Tic_Tac_toe
             Console.ReadKey();
             Console.Clear();
 
-
         }
 
-        // Validate user input from main menu
-        // It should be a key from numbers 1-4
+        /*
+    The main Math class
+    Contains all methods for performing basic math functions
+        */
         static bool validateInput(string userInput)
         {
+            // Determine if console key is a number
+            // Source: https://stackoverflow.com/questions/12644473/c-sharp-check-if-consolekeyinfo-keychar-is-a-number
 
-            //  //https://stackoverflow.com/questions/12644473/c-sharp-check-if-consolekeyinfo-keychar-is-a-number
             // Validate user input.
-            // Should be number 1-5
+            // Should be number 1-9
             int number;
             if (Int32.TryParse(userInput, out number))
             {
@@ -128,11 +125,13 @@ namespace Tic_Tac_toe
                 if (number >= 1 && number <= 9)
                 {
                     // valid number
-                    //check if it is free
+                    //check if the square position associated with the number is filled already
                     int[] squarePosition = GetSquarePosition(userInput);
                     squareSymbol = gameBoard[squarePosition[0], squarePosition[1]];
                     if (squareSymbol == "X" || squareSymbol == "O")
                     {
+                        // The Symbol in the square position is already filled with a "X" or "O"
+                        // Prompt user to try a different square selection
                         Console.WriteLine();
                         Console.BackgroundColor = ConsoleColor.DarkRed;
 
@@ -148,13 +147,12 @@ namespace Tic_Tac_toe
                         return false;
                     }
 
-
-
-
                     return true;
                 }
 
             }
+
+            // User input was invalid. It did not parse to number.
             Console.WriteLine();
 
             Console.BackgroundColor = ConsoleColor.DarkRed;
@@ -166,37 +164,20 @@ namespace Tic_Tac_toe
             Console.ReadKey();
             PrintGameBoard();
             return false;
-
         }
 
-
-
-        //Perform tasks to prompt the main menu
-
+        //Performs a player's turn.
         static void DoTurn()
         {
             PrintGameBoard();
             //
-            PerformUserSelection();
+            GetUserInput();
 
             movesPlayed++; // Turn is over so increment moves played.
         }
 
-        static void PerformUserSelection()
-        {
-            string validSelection = GetUserInput();
-
-            //   Console.WriteLine("User proper selection is {0}", validSelection);
-
-            // Fill in the spot
-            gameBoard[squarePosition[0], squarePosition[1]] = currentTurn; //Assign the current turn (either X or O to the square position)
-
-
-
-
-
-
-        }
+        /// <summary>
+        /// Logic to get user selection, validate the input, and perform the player move</summary>  
         static void StartGame()
         {
             InitializeGame();
@@ -206,37 +187,37 @@ namespace Tic_Tac_toe
             {
                 DoTurn();
 
-                // See if we have any winner...
-                // if we have a winner
-                if (WeHaveWinner())
+                // Check for a winner
+                if (CheckForWinner())
                 {
+
+                    // We have found a winner
                     gameActive = false;
                     PrintGameBoard();
-                    if (currentTurn == "X")
+                    if (currentPlayer == "X")
                     {
-                        Console.BackgroundColor = ConsoleColor.Green;
+                        Console.BackgroundColor = ConsoleColor.Red;
 
                     }
                     else
                     {
-                        Console.BackgroundColor = ConsoleColor.Yellow;
+                        Console.BackgroundColor = ConsoleColor.Blue;
 
                     }
                     Console.ForegroundColor = ConsoleColor.Black;
 
-
                     Console.WriteLine();
-                    Console.Write("PLAYER {0} WINS", currentTurn);
+                    Console.Write("PLAYER {0} WINS", currentPlayer);
                     Console.WriteLine();
 
                     Console.ResetColor();
                 }
 
-                // we have no winner yet.
-                // CHeck if the board is full
-                if (movesPlayed > 8)
+                // We have no winner yet.
+                // Check if the board is full for a tie
+                else if (movesPlayed > 8)
                 {
-                    //we are tied.
+                    // We have a tie
                     Console.BackgroundColor = ConsoleColor.DarkBlue;
                     Console.WriteLine();
 
@@ -252,21 +233,24 @@ namespace Tic_Tac_toe
 
 
                 // Game did not end so switch to next player.
-                if (currentTurn == "X")
+                if (currentPlayer == "X")
                 {
-                    currentTurn = "O";
+                    currentPlayer = "O";
                 }
                 else
                 {
-                    currentTurn = "X";
+                    currentPlayer = "X";
                 }
 
             }
 
-
-
         }
 
+        /// <summary>
+        /// Check the 3 square positions and return true if they match symbols.</summary>
+        /// <param name="symbol1"> 1st square to compare with 2nd square</param>
+        /// <param name="symbol2"> 2nd square to compare with1st and 3rd squares</param>
+        /// <param name="symbol3"> 3rd square to compare with 2nd square</param>
 
         static bool CheckPositionsForWinner(string symbol1, string symbol2, string symbol3)
         {
@@ -278,7 +262,10 @@ namespace Tic_Tac_toe
             }
             return false;
         }
-        static bool WeHaveWinner()
+
+        /// <summary>
+        /// Check to see if the current game has a winner.</summary>
+        static bool CheckForWinner()
         {
 
             //row one across
@@ -286,7 +273,6 @@ namespace Tic_Tac_toe
             {
                 return true;
             }
-
 
             //row two across
             if (CheckPositionsForWinner(gameBoard[1, 0], gameBoard[1, 1], gameBoard[1, 2]))
@@ -326,28 +312,38 @@ namespace Tic_Tac_toe
 
             return false; //we do not have a winner
         }
+
+        /// <summary>
+        /// Description for SomeMethod.</summary>
+        /// <param name="s"> Parameter description for s goes here</param>
+
+        /// <summary>
+        /// Based on the symbol in question, we return the appropriate color to display</summary>
+        /// <param name="symbol"> The symbol that we are checking to see what color to return</param>
+
         static ConsoleColor GetSymbolColor(string symbol)
         {
 
             if (symbol == "X")
             {
-
-                //return blue?
-                return ConsoleColor.Green;
+                // We are a "X" symbol so return a red color
+                return ConsoleColor.Red;
             }
             else if (symbol == "O")
             {
-                return ConsoleColor.Yellow;
+                // We are a "O" symbol so return a blue color
+                return ConsoleColor.Blue;
             }
             else
             {
-                return ConsoleColor.Cyan;
-                {
+                // We are a not filled yet, and must be a number.
+                return ConsoleColor.Green;
 
-                }
             }
         }
 
+        /// <summary>
+        /// Logic to print out the game board.</summary>
         static void PrintGameBoard()
         {
             // multicolor lines
@@ -355,7 +351,7 @@ namespace Tic_Tac_toe
 
             Console.Clear();
 
-            Console.ForegroundColor = ConsoleColor.DarkMagenta;
+            Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("-------------");
 
             Console.Write("| ");
@@ -364,7 +360,7 @@ namespace Tic_Tac_toe
             Console.Write(gameBoard[0, 0]);
             Console.ResetColor();
 
-            Console.ForegroundColor = ConsoleColor.DarkMagenta;
+            Console.ForegroundColor = ConsoleColor.White;
             Console.Write(" | ");
             Console.ResetColor();
 
@@ -372,7 +368,7 @@ namespace Tic_Tac_toe
             Console.Write(gameBoard[0, 1]);
             Console.ResetColor();
 
-            Console.ForegroundColor = ConsoleColor.DarkMagenta;
+            Console.ForegroundColor = ConsoleColor.White;
             Console.Write(" | ");
             Console.ResetColor();
 
@@ -380,14 +376,12 @@ namespace Tic_Tac_toe
             Console.Write(gameBoard[0, 2]);
             Console.ResetColor();
 
-            Console.ForegroundColor = ConsoleColor.DarkMagenta;
+            Console.ForegroundColor = ConsoleColor.White;
             Console.Write(" | ");
             Console.ResetColor();
-
-
             // End of first row
 
-            Console.ForegroundColor = ConsoleColor.DarkMagenta;
+            Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine();
             Console.WriteLine("-------------");
 
@@ -397,7 +391,7 @@ namespace Tic_Tac_toe
             Console.Write(gameBoard[1, 0]);
             Console.ResetColor();
 
-            Console.ForegroundColor = ConsoleColor.DarkMagenta;
+            Console.ForegroundColor = ConsoleColor.White;
             Console.Write(" | ");
             Console.ResetColor();
 
@@ -405,7 +399,7 @@ namespace Tic_Tac_toe
             Console.Write(gameBoard[1, 1]);
             Console.ResetColor();
 
-            Console.ForegroundColor = ConsoleColor.DarkMagenta;
+            Console.ForegroundColor = ConsoleColor.White;
             Console.Write(" | ");
             Console.ResetColor();
 
@@ -413,14 +407,12 @@ namespace Tic_Tac_toe
             Console.Write(gameBoard[1, 2]);
             Console.ResetColor();
 
-            Console.ForegroundColor = ConsoleColor.DarkMagenta;
+            Console.ForegroundColor = ConsoleColor.White;
             Console.Write(" | ");
             Console.ResetColor();
-
             //end of second row
 
-
-            Console.ForegroundColor = ConsoleColor.DarkMagenta;
+            Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine();
             Console.WriteLine("-------------");
 
@@ -430,7 +422,7 @@ namespace Tic_Tac_toe
             Console.Write(gameBoard[2, 0]);
             Console.ResetColor();
 
-            Console.ForegroundColor = ConsoleColor.DarkMagenta;
+            Console.ForegroundColor = ConsoleColor.White;
             Console.Write(" | ");
             Console.ResetColor();
 
@@ -438,7 +430,7 @@ namespace Tic_Tac_toe
             Console.Write(gameBoard[2, 1]);
             Console.ResetColor();
 
-            Console.ForegroundColor = ConsoleColor.DarkMagenta;
+            Console.ForegroundColor = ConsoleColor.White;
             Console.Write(" | ");
             Console.ResetColor();
 
@@ -446,11 +438,11 @@ namespace Tic_Tac_toe
             Console.Write(gameBoard[2, 2]);
             Console.ResetColor();
 
-            Console.ForegroundColor = ConsoleColor.DarkMagenta;
+            Console.ForegroundColor = ConsoleColor.White;
             Console.Write(" | ");
             Console.ResetColor();
 
-            Console.ForegroundColor = ConsoleColor.DarkMagenta;
+            Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine();
             Console.WriteLine("-------------");
             Console.ResetColor();
@@ -458,31 +450,30 @@ namespace Tic_Tac_toe
 
             Console.ForegroundColor = ConsoleColor.Black;
 
-            if (currentTurn == "X")
+            if (currentPlayer == "X")
             {
-                Console.BackgroundColor = ConsoleColor.Green;
+                Console.BackgroundColor = ConsoleColor.Red;
 
             }
             else
             {
-                Console.BackgroundColor = ConsoleColor.Yellow;
+                Console.BackgroundColor = ConsoleColor.Blue;
 
             }
             Console.WriteLine();
-            Console.Write(" It is Player's {0} turn! ", currentTurn);
+            Console.Write(" It is Player's {0} turn! ", currentPlayer);
             Console.ResetColor();
             Console.WriteLine();
 
             Console.WriteLine("Please press 1-9 to play a square!");
 
-
-
         }
 
+        /// <summary>
+        /// Method to initiliaze the game. It resets all variables to start the game properly.</summary>
         static void InitializeGame()
         {
-
-            currentTurn = "X";
+            currentPlayer = "X";
             movesPlayed = 0;
             gameTie = false;
             gameActive = true;
@@ -494,18 +485,13 @@ namespace Tic_Tac_toe
                                 {"7", "8", "9"},
                             };
 
-
         }
-        static string GetUserInput()
+
+        static void GetUserInput()
         {
-            // 1. Get user input as key
-            // 2. Make sure key is valid (1-9)
-            // 3. Make sure key is associated to an empty square
-
-
 
             bool isValid = false;
-            string userInput = "";
+            string userInput;
 
 
             while (!isValid)
@@ -514,17 +500,14 @@ namespace Tic_Tac_toe
 
                 isValid = validateInput(userInput);
             }
+            // Fill in the spot
+            gameBoard[squarePosition[0], squarePosition[1]] = currentPlayer; //Assign the current turn (either X or O to the square position)
 
-            // newLine();
-            //  Console.WriteLine("userInput: {0}", userInput);
-
-
-
-
-
-            return "1";
         }
 
+        /// <summary>
+        /// Pass in the user's input and return the square position in a 2d int array.</summary>
+        /// <param name="userInput"> validated user input</param>
         static int[] GetSquarePosition(string userInput)
         {
 
@@ -564,15 +547,7 @@ namespace Tic_Tac_toe
             }
             string squareSymbol = gameBoard[squarePosition[0], squarePosition[1]];
 
-
-
             return squarePosition;
         }
-
-
-
-        //Write a program that will take in a 4 digit integer and calculate the sum of its digits without ever converting the integer to a string.
-
-
     }
 }
