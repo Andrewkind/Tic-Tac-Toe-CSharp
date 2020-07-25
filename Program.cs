@@ -9,6 +9,7 @@ namespace Tic_Tac_toe
 {
     static public class GameBoard
     {
+        // GameBoard variables
         public static string squareSymbol; // The value within a square (can be "X", "O" or a number 1-9)
         public static int[] squarePosition; // The position of the square within the array. The array is: [row, column]
         public static bool playAgain = true; // Remains true if the player wants to play another game 
@@ -22,12 +23,10 @@ namespace Tic_Tac_toe
     }
     public class Program
     {
-        // Global Variable Declarations
-
-
         static void Main(string[] args)
         {
             // Determines if we play a game
+            // The game starts as playAgain true to play at least one round.
             while (GameBoard.playAgain)
             {
 
@@ -37,7 +36,7 @@ namespace Tic_Tac_toe
                 // Begin the game
                 StartGame();
 
-                //Game is over. Check with user if they want to play again.
+                //Game was played and is now over. Check with user if they want to play again.
                 bool validInput = false;
 
                 while (validInput == false)
@@ -52,7 +51,6 @@ namespace Tic_Tac_toe
                         //User indicated they want to play again
                         validInput = true;
                         GameBoard.playAgain = true;
-
 
                     }
                     else if (userInput == "N")
@@ -92,7 +90,7 @@ namespace Tic_Tac_toe
 
             Console.Clear();
 
-            Console.BackgroundColor = ConsoleColor.Magenta;
+            Console.BackgroundColor = ConsoleColor.DarkBlue;
             Console.WriteLine("▒▒██████████████████████████████████████████████████▒▒");
 
             Console.WriteLine(@"██  _____ ___ ___   _____ _   ___   _____ ___  ___  ██");
@@ -103,8 +101,9 @@ namespace Tic_Tac_toe
             Console.WriteLine(@"██                                                  ██");
 
             Console.WriteLine("▒▒██████████████████████████████████████████████████▒▒");
-            Console.WriteLine();
             Console.ResetColor();
+
+            Console.WriteLine();
 
             Console.WriteLine("Press any key to begin!");
             Console.ReadKey();
@@ -143,20 +142,16 @@ namespace Tic_Tac_toe
 
                         Console.WriteLine();
                         Console.Write("Square in row {0} and column {1} is already taken. press any key.", GameBoard.squarePosition[0], GameBoard.squarePosition[1]);
-                        Console.WriteLine();
-
                         Console.ResetColor();
+                        Console.WriteLine();
 
                         Console.ReadKey();
 
                         PrintGameBoard();
-                        PrintUserPrompt();
                         return false;
                     }
-
                     return true;
                 }
-
             }
 
             // User input was invalid. It did not parse to number.
@@ -164,9 +159,10 @@ namespace Tic_Tac_toe
 
             Console.BackgroundColor = ConsoleColor.DarkRed;
             Console.Write("Invalid input: '{0}'. Press any key.", userInput);
+            Console.ResetColor();
+
             Console.WriteLine();
 
-            Console.ResetColor();
 
             Console.ReadKey();
             PrintGameBoard();
@@ -180,13 +176,12 @@ namespace Tic_Tac_toe
             if (GameBoard.currentPlayer == "X")
             {
                 Console.BackgroundColor = ConsoleColor.Red;
-
             }
             else
             {
                 Console.BackgroundColor = ConsoleColor.Blue;
-
             }
+
             Console.WriteLine();
             Console.Write(" It is Player's {0} turn! ", GameBoard.currentPlayer);
             Console.ResetColor();
@@ -200,7 +195,6 @@ namespace Tic_Tac_toe
         static void DoTurn()
         {
             PrintGameBoard();
-            //
             GetUserInput();
             PrintGameBoard();
 
@@ -219,7 +213,6 @@ namespace Tic_Tac_toe
             // Main Game Loop
             while (GameBoard.gameActive == true)
             {
-
                 // Each player performs a turn one after another until the game ends by a winner or tie
                 DoTurn();
 
@@ -233,8 +226,7 @@ namespace Tic_Tac_toe
                     if (GameBoard.currentPlayer == "X")
                     {
                         Console.BackgroundColor = ConsoleColor.Red;
-                        GameBoard.score[0]++;
-
+                        
                     }
                     else
                     {
@@ -244,19 +236,17 @@ namespace Tic_Tac_toe
                     Console.WriteLine();
 
                     Console.Write(" PLAYER {0} WINS ", GameBoard.currentPlayer);
-                    Console.WriteLine();
                     Console.ResetColor();
+                    Console.WriteLine();
                     Console.WriteLine();
 
                     printScore();
                 }
-
                 // We have no winner yet.
                 // Check if the board is full for a tie
                 else if (GameBoard.movesPlayed > 8)
                 {
                     // We have a tie
-
                     GameBoard.score[2]++; // increment tie score
 
                     Console.ForegroundColor = ConsoleColor.Black;
@@ -277,7 +267,6 @@ namespace Tic_Tac_toe
                     GameBoard.gameActive = false; //end the game
                 }
 
-
                 // Game did not end so switch to next player.
                 if (GameBoard.currentPlayer == "X")
                 {
@@ -287,15 +276,12 @@ namespace Tic_Tac_toe
                 {
                     GameBoard.currentPlayer = "X";
                 }
-
             }
-
         }
         /// <summary>
         /// Displays the player's scores to console</summary>
         static void printScore()
         {
-
             //Score
             Console.ResetColor();
             if (GameBoard.currentPlayer == "X")
@@ -308,8 +294,6 @@ namespace Tic_Tac_toe
                 // We are a "O" symbol so return a blue color
                 Console.BackgroundColor = ConsoleColor.Blue;
             }
-
-
 
             //
             Console.ResetColor();
@@ -547,7 +531,7 @@ namespace Tic_Tac_toe
             Console.ResetColor();
             // end of third row 
 
-
+            PrintUserPrompt(); // After printing the board, print the user prompt.
         }
 
         /// <summary>
@@ -564,15 +548,16 @@ namespace Tic_Tac_toe
                                 {"4", "5", "6"},
                                 {"7", "8", "9"},
                             };
-
         }
 
         static void GetUserInput()
         {
 
+            // Tell user what to do
+            //  Console.WriteLine("Please press 1-9 to play a square!");
+
             bool isValid = false;
             string userInput;
-
 
             while (!isValid)
             {
@@ -581,8 +566,7 @@ namespace Tic_Tac_toe
                 isValid = validateInput(userInput);
             }
             // Fill in the spot
-            GameBoard.board[GameBoard.squarePosition[0], GameBoard.squarePosition[1]] = GameBoard.currentPlayer; //Assign the current turn (either X or O to the square position)
-
+            GameBoard.board[GameBoard.squarePosition[0], GameBoard.squarePosition[1]] = GameBoard.currentPlayer; 
         }
 
         /// <summary>
