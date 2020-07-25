@@ -1,0 +1,13 @@
+C:\Users\andre\Projects\c-in-class-practice-problems-Andrewkind\bin\Debug\netcoreapp3.1\c-in-class-practice-problems-Andrewkind.exe
+C:\Users\andre\Projects\c-in-class-practice-problems-Andrewkind\bin\Debug\netcoreapp3.1\c-in-class-practice-problems-Andrewkind.deps.json
+C:\Users\andre\Projects\c-in-class-practice-problems-Andrewkind\bin\Debug\netcoreapp3.1\c-in-class-practice-problems-Andrewkind.runtimeconfig.json
+C:\Users\andre\Projects\c-in-class-practice-problems-Andrewkind\bin\Debug\netcoreapp3.1\c-in-class-practice-problems-Andrewkind.runtimeconfig.dev.json
+C:\Users\andre\Projects\c-in-class-practice-problems-Andrewkind\bin\Debug\netcoreapp3.1\c-in-class-practice-problems-Andrewkind.dll
+C:\Users\andre\Projects\c-in-class-practice-problems-Andrewkind\bin\Debug\netcoreapp3.1\c-in-class-practice-problems-Andrewkind.pdb
+C:\Users\andre\Projects\c-in-class-practice-problems-Andrewkind\obj\Debug\netcoreapp3.1\c-in-class-practice-problems-Andrewkind.csprojAssemblyReference.cache
+C:\Users\andre\Projects\c-in-class-practice-problems-Andrewkind\obj\Debug\netcoreapp3.1\c-in-class-practice-problems-Andrewkind.AssemblyInfoInputs.cache
+C:\Users\andre\Projects\c-in-class-practice-problems-Andrewkind\obj\Debug\netcoreapp3.1\c-in-class-practice-problems-Andrewkind.AssemblyInfo.cs
+C:\Users\andre\Projects\c-in-class-practice-problems-Andrewkind\obj\Debug\netcoreapp3.1\c-in-class-practice-problems-Andrewkind.csproj.CoreCompileInputs.cache
+C:\Users\andre\Projects\c-in-class-practice-problems-Andrewkind\obj\Debug\netcoreapp3.1\c-in-class-practice-problems-Andrewkind.dll
+C:\Users\andre\Projects\c-in-class-practice-problems-Andrewkind\obj\Debug\netcoreapp3.1\c-in-class-practice-problems-Andrewkind.pdb
+C:\Users\andre\Projects\c-in-class-practice-problems-Andrewkind\obj\Debug\netcoreapp3.1\c-in-class-practice-problems-Andrewkind.genruntimeconfig.cache
