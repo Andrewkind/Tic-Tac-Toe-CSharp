@@ -1,4 +1,7 @@
-Tic Tac Toe
+C# Tic Tac Toe
+
+![TicTacToe1](/tic1.png)
+![TicTacToe2](/tic2.png)
 
 Written in C#!
 
